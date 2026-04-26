@@ -1,0 +1,7 @@
+**/.env
+**/node_modules
+**/sessions
+.prettierrc
+.vscode
+.claude
+CLAUDE.md

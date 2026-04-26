@@ -1,0 +1,43 @@
+.group-list {
+  width: 25%;
+  background: #2c2c2c;
+  color: #ccc;
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+  flex-shrink: 0;
+
+  h2 {
+    padding: 1rem 1.25rem;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: #999;
+    margin: 0;
+    border-bottom: 1px solid #3a3a3a;
+  }
+
+  ul {
+    list-style: none;
+    margin: 0;
+    padding: 0.5rem 0;
+
+    li {
+      padding: 0.5rem 1.25rem;
+      cursor: pointer;
+      border-radius: 4px;
+      margin: 0 0.5rem;
+      font-size: 0.95rem;
+
+      &:hover {
+        background: #3a3a3a;
+        color: white;
+      }
+
+      &.active {
+        background: #0096ff;
+        color: white;
+      }
+    }
+  }
+}
