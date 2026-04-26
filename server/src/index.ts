@@ -12,7 +12,7 @@ import { router as authRoutes } from "@/api/auth/authRoutes";
 import { router as messageRoutes } from "@/api/message/messageRoutes";
 import { router as roomRoutes } from "@/api/room/roomRoutes";
 import { router as userInfoRoutes } from "@/api/userinfo/userInfoRoutes";
-import { sequelize } from "@/db/connection";
+import { prisma } from "@/prisma";
 import { registerRoomSocketHandlers } from "@/socket/roomSocket";
 
 const PORT = process.env.PORT;
@@ -61,10 +61,9 @@ app.use("/api/userinfo", userInfoRoutes);
 io.on("connection", (socket) => {
   registerRoomSocketHandlers(socket);
 });
-sequelize
-  .authenticate()
+prisma
+  .$connect()
   .then(() => {
-    sequelize.sync();
     httpServer.listen(PORT, () => {
       console.log(`Server running on port ${PORT}`);
     });

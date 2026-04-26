@@ -1,20 +1,16 @@
-import { Room, RoomMembership } from "@/db/roomModels";
-import { User } from "@/db/userModels";
+import { prisma } from "@/prisma";
 import { RoomWithMembershipDto } from "@shared/room/listRooms";
 import { MemberType } from "@shared/room/member";
 import { RoomType } from "@shared/room/room";
 
-// The union type resulting from querying an inner join of the room membership to room tables
-type RoomWithMembership = RoomMembership & {
-  Room: Room;
+/** Returns the user with the given email, or null if not found. */
+const lookUpUserByEmail = async (email: string) => {
+  return await prisma.user.findFirst({ where: { email } });
 };
 
-const lookUpUserByEmail = async (email: string): Promise<User | null> => {
-  return await User.findOne({ where: { email } });
-};
-
-const lookupUserById = async (userId: string): Promise<User | null> => {
-  return await User.findOne({ where: { userId } });
+/** Returns the user with the given id, or null if not found. */
+const lookupUserById = async (userId: string) => {
+  return await prisma.user.findFirst({ where: { userId } });
 };
 
 /**
@@ -23,31 +19,18 @@ const lookupUserById = async (userId: string): Promise<User | null> => {
 const listRoomsForUser = async (
   userId: string,
 ): Promise<RoomWithMembershipDto[]> => {
-  return await RoomMembership.findAll({
+  const memberships = await prisma.roomMembership.findMany({
     where: { userId },
-    attributes: ["roomId", "membershipType"],
-    include: [{ model: Room, required: true }],
-  }).then((results) =>
-    // Need intermediate cast since RoomMembership and RoomWithMembership are incompatible types
-    (results as unknown as RoomWithMembership[]).map(
-      buildRoomWithMembershipDto,
-    ),
-  );
-};
+    include: { room: true },
+  });
 
-const buildRoomWithMembershipDto = (
-  roomWithMembership: RoomWithMembership,
-): RoomWithMembershipDto => {
-  const { roomId, membershipType } = roomWithMembership;
-  const room = roomWithMembership.Room;
-
-  return {
-    roomId: roomId,
-    name: room.name,
-    type: room.type as RoomType,
-    createdAt: room.createdAt.toISOString(),
-    memberType: membershipType as MemberType,
-  };
+  return memberships.map((m) => ({
+    roomId: m.roomId,
+    name: m.room.name,
+    type: m.room.type as unknown as RoomType,
+    createdAt: m.room.createdAt.toISOString(),
+    memberType: m.membershipType as unknown as MemberType,
+  }));
 };
 
 export { listRoomsForUser, lookUpUserByEmail, lookupUserById };

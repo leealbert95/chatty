@@ -1,36 +1,32 @@
+import { MemberType as PrismaMemberType, RoomType as PrismaRoomType } from "@prisma/client";
 import { v4 as uuidv4 } from "uuid";
 
-import { lookupUserById } from "../userinfo/userInfoService";
-import { Room, RoomMembership } from "@/db/roomModels";
-import { User } from "@/db/userModels";
+import { prisma } from "@/prisma";
 import { MemberDto, MemberType } from "@shared/room/member";
 import { RoomDto, RoomType } from "@shared/room/room";
 
-/** Either the user or group could not be found. */
+/** Thrown when a referenced room or user does not exist. */
 class ResourceNotFoundError extends Error {}
-class AlreadyJoinedError extends Error {}
 
-/** The result of joining the room membership and user tables when looking up members of a room. */
-type MembershipWithUser = RoomMembership & { User: User };
+/** Thrown when a user attempts to join a room they already belong to. */
+class AlreadyJoinedError extends Error {}
 
 /**
  * Returns the member profiles of all members belonging to a room.
- * Executes an inner join with the User table to combine the necessary data for the member profile.
  */
 const listMembersForRoom = async (roomId: string): Promise<MemberDto[]> => {
-  return await RoomMembership.findAll({
+  const memberships = await prisma.roomMembership.findMany({
     where: { roomId },
-    attributes: ["userId", "membershipType", "createdAt"],
-    include: [
-      {
-        model: User,
-        required: true,
-      },
-    ],
-  }).then((memberships) =>
-    // Need intermediate cast as unknown since RoomMembership and MembershipWithUser are not directly compatible with each other.
-    (memberships as unknown as MembershipWithUser[]).map(buildMemberDto),
-  );
+    include: { user: true },
+  });
+
+  return memberships.map((m) => ({
+    userId: m.userId,
+    name: m.user.name,
+    email: m.user.email,
+    memberType: m.membershipType as unknown as MemberType,
+    joinedAt: m.createdAt.toISOString(),
+  }));
 };
 
 /**
@@ -41,27 +37,27 @@ const addUserToRoom = async (
   userId: string,
   memberType: MemberType = MemberType.MEMBER,
 ): Promise<RoomDto> => {
-  const user = lookupUserById(userId);
-  if (user === null) {
-    throw new ResourceNotFoundError(`User ${userId} not found`);
-  }
-  const room = await Room.findOne({ where: { roomId } });
-  if (room === null)
-    throw new ResourceNotFoundError(`Room ${roomId} not found`);
-  const membership = await RoomMembership.findOne({
-    where: { userId, roomId },
-  });
-  if (membership !== null) {
+  const [room, existingMembership] = await Promise.all([
+    prisma.room.findFirst({ where: { roomId } }),
+    prisma.roomMembership.findFirst({ where: { userId, roomId } }),
+  ]);
+
+  if (room === null) throw new ResourceNotFoundError(`Room ${roomId} not found`);
+  if (existingMembership !== null)
     throw new AlreadyJoinedError(
       `User ${userId} is already a member of room ${roomId}`,
     );
-  }
-  await RoomMembership.create({
-    roomId,
-    userId,
-    membershipType: memberType,
+
+  await prisma.roomMembership.create({
+    data: { roomId, userId, membershipType: memberType as unknown as PrismaMemberType },
   });
-  return room.toRoomDto();
+
+  return {
+    roomId: room.roomId,
+    name: room.name,
+    type: room.type as unknown as RoomType,
+    createdAt: room.createdAt.toISOString(),
+  };
 };
 
 /**
@@ -73,27 +69,27 @@ const createRoom = async (
   userId: string,
 ): Promise<RoomDto> => {
   const roomId = `r${uuidv4()}`;
-  const [room] = await Promise.all([
-    Room.create({ roomId, name, type, createdAt: new Date() }),
-    RoomMembership.create({
-      roomId,
-      userId,
-      membershipType: MemberType.ADMIN,
-    }),
-  ]);
-  return room.toRoomDto();
-};
 
-const buildMemberDto = (memberWithUser: MembershipWithUser): MemberDto => {
-  const { userId, membershipType, createdAt } = memberWithUser;
-  const user = memberWithUser.User;
+  const room = await prisma.room.create({
+    data: {
+      roomId,
+      name,
+      type: type as unknown as PrismaRoomType,
+      memberships: {
+        create: {
+          userId,
+          membershipType: MemberType.ADMIN as unknown as PrismaMemberType,
+        },
+      },
+    },
+  });
+
   return {
-    userId: userId,
-    name: user.name,
-    email: user.email,
-    memberType: membershipType as MemberType,
-    joinedAt: createdAt.toISOString(),
-  } as MemberDto;
+    roomId: room.roomId,
+    name: room.name,
+    type: room.type as unknown as RoomType,
+    createdAt: room.createdAt.toISOString(),
+  };
 };
 
 export { listMembersForRoom, addUserToRoom, createRoom, ResourceNotFoundError };

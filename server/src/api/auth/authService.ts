@@ -2,11 +2,12 @@ import bcrypt from "bcrypt";
 import { v4 as uuidv4 } from "uuid";
 
 import { lookUpUserByEmail } from "../userinfo/userInfoService";
-import { User, UserCredentials } from "@/db/userModels";
+import { prisma } from "@/prisma";
 import { InvalidCredentialsCase } from "@shared/user/login";
 
 const SALT_ROUNDS = 12;
 
+/** Thrown when attempting to register an email that already exists. */
 class UserAlreadyExistsError extends Error {
   constructor(email: string) {
     super(`User with email ${email} already exists`);
@@ -16,33 +17,23 @@ class UserAlreadyExistsError extends Error {
 /**
  * Creates a new user account and stores an encrypted password.
  */
-const registerUser = async (
-  name: string,
-  email: string,
-  password: string,
-): Promise<User> => {
+const registerUser = async (name: string, email: string, password: string) => {
   const existing = await lookUpUserByEmail(email);
   if (existing !== null) throw new UserAlreadyExistsError(email);
 
   const userId = `u${uuidv4()}`;
   const hashedPassword = await bcrypt.hash(password, SALT_ROUNDS);
 
-  const user = await User.create(
-    {
+  return await prisma.user.create({
+    data: {
       userId,
       name,
       email,
-      createdAt: new Date(),
-      UserCredentials: {
-        password: hashedPassword,
+      credentials: {
+        create: { password: hashedPassword },
       },
     },
-    {
-      include: [User.UserCredentials],
-    },
-  );
-
-  return user;
+  });
 };
 
 /**
@@ -61,18 +52,15 @@ class InvalidCredentialsError extends Error {
 /**
  * Verifies a user's email and password, returning the user on success.
  */
-const authenticateUser = async (
-  email: string,
-  password: string,
-): Promise<User> => {
-  const user = await User.findOne({ where: { email } });
+const authenticateUser = async (email: string, password: string) => {
+  const user = await prisma.user.findFirst({ where: { email } });
   if (user === null)
     throw new InvalidCredentialsError(
       InvalidCredentialsCase.USER_NOT_FOUND,
       `User ${email} not found`,
     );
 
-  const creds = await UserCredentials.findOne({
+  const creds = await prisma.userCredentials.findFirst({
     where: { userId: user.userId },
   });
   if (creds === null)

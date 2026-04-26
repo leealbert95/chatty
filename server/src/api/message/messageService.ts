@@ -1,6 +1,6 @@
 import { v4 as uuidv4 } from "uuid";
 
-import { Message } from "@/db/messageModels";
+import { prisma } from "@/prisma";
 import { MessageDto } from "@shared/message/message";
 
 const DEFAULT_PAGE_SIZE = 50;
@@ -21,24 +21,32 @@ const listMessages = async (
   page: number = 1,
   pageSize: number = DEFAULT_PAGE_SIZE,
 ): Promise<MessageDto[]> => {
-  const messages = await Message.findAll({
+  const messages = await prisma.message.findMany({
     where: { roomId },
-    order: [["sentAt", "ASC"]],
-    limit: pageSize,
-    offset: (page - 1) * pageSize,
+    orderBy: { sentAt: "asc" },
+    take: pageSize,
+    skip: (page - 1) * pageSize,
   });
 
-  return messages.map((message) => message.toMessageDto());
+  return messages.map((m) => ({
+    messageId: m.messageId,
+    content: m.content,
+    roomId: m.roomId,
+    sentBy: m.sentBy ?? "",
+    sentAt: m.sentAt.toISOString(),
+  }));
 };
 
 const saveMessage = async (messageDetails: MessageDetails): Promise<void> => {
-  const messageId = `r${uuidv4()}`;
-  await Message.create({
-    messageId: messageId,
-    content: messageDetails.content,
-    roomId: messageDetails.roomId,
-    sentBy: messageDetails.sentBy,
-    sentAt: new Date(messageDetails.sentAt),
+  const messageId = `m${uuidv4()}`;
+  await prisma.message.create({
+    data: {
+      messageId,
+      content: messageDetails.content,
+      roomId: messageDetails.roomId,
+      sentBy: messageDetails.sentBy,
+      sentAt: new Date(messageDetails.sentAt),
+    },
   });
 };
 
