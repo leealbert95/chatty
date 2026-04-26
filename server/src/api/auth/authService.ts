@@ -27,10 +27,20 @@ const registerUser = async (
   const userId = `u${uuidv4()}`;
   const hashedPassword = await bcrypt.hash(password, SALT_ROUNDS);
 
-  const user = await Promise.all([
-    User.create({ userId, name, email, createdAt: new Date() }),
-    UserCredentials.create({ userId, password: hashedPassword }),
-  ]).then(([newUser]) => newUser);
+  const user = await User.create(
+    {
+      userId,
+      name,
+      email,
+      createdAt: new Date(),
+      UserCredentials: {
+        password: hashedPassword,
+      },
+    },
+    {
+      include: [User.UserCredentials],
+    },
+  );
 
   return user;
 };

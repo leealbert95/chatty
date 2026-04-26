@@ -21,13 +21,13 @@ router.post("/register", async (req: Request, res: Response): Promise<void> => {
   try {
     const user = await registerUser(name, email, password);
     req.session.userId = user.userId;
-    req.session.save();
     res.status(201).json({
       id: user.userId,
       name: user.name,
       email: user.email,
     } as RegisterResponse);
   } catch (err) {
+    console.log(err);
     const code = err instanceof UserAlreadyExistsError ? 409 : 500;
     res.status(code).json({ error: (err as Error).message });
   }

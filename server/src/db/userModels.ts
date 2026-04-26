@@ -1,6 +1,7 @@
 import {
   CreationOptional,
   DataTypes,
+  HasOne,
   InferAttributes,
   InferCreationAttributes,
   Model,
@@ -14,6 +15,7 @@ class User extends Model<InferAttributes<User>, InferCreationAttributes<User>> {
   declare email: string;
   declare profilePicture: string | null;
   declare createdAt: CreationOptional<Date>;
+  static UserCredentials: HasOne;
 }
 
 User.init(
@@ -66,11 +68,11 @@ UserCredentials.init(
   },
 );
 
-UserCredentials.belongsTo(User, {
+UserCredentials.User = UserCredentials.belongsTo(User, {
   foreignKey: "userId",
   onUpdate: "RESTRICT",
   onDelete: "CASCADE",
 });
-User.hasOne(UserCredentials);
+User.UserCredentials = User.hasOne(UserCredentials);
 
 export { User, UserCredentials };
