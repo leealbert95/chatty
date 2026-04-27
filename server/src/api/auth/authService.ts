@@ -15,6 +15,19 @@ class UserAlreadyExistsError extends Error {
 }
 
 /**
+ * Error thrown if validation checks fail during user authentication. Not
+ * intended to be used for errors due to database read failures.
+ */
+class InvalidCredentialsError extends Error {
+  public readonly invalidCredentialsCase: InvalidCredentialsCase;
+
+  constructor(invalidCredentialsCase: InvalidCredentialsCase, message: string) {
+    super(message);
+    this.invalidCredentialsCase = invalidCredentialsCase;
+  }
+}
+
+/**
  * Creates a new user account and stores an encrypted password.
  */
 const registerUser = async (name: string, email: string, password: string) => {
@@ -35,19 +48,6 @@ const registerUser = async (name: string, email: string, password: string) => {
     },
   });
 };
-
-/**
- * Error thrown if validation checks fail during user authentication. Not
- * intended to be used for errors due to database read failures.
- */
-class InvalidCredentialsError extends Error {
-  public readonly invalidCredentialsCase: InvalidCredentialsCase;
-
-  constructor(invalidCredentialsCase: InvalidCredentialsCase, message: string) {
-    super(message);
-    this.invalidCredentialsCase = invalidCredentialsCase;
-  }
-}
 
 /**
  * Verifies a user's email and password, returning the user on success.
