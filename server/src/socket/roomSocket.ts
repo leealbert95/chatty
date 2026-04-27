@@ -29,9 +29,6 @@ const registerRoomSocketHandlers = (socket: Socket): void => {
   socket.on(RoomEvents.POST_MESSAGE, async (data: string) => {
     const session = socket.request.session;
     const userId = session.userId as string;
-
-    console.log("USER ID: " + userId);
-
     const parsedPayload = parseToMessagePayload(data);
 
     if (parsedPayload === null) {
