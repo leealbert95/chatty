@@ -2,7 +2,7 @@ import "@/session";
 
 import { Socket } from "socket.io";
 
-import { saveMessage } from "@/api/message/messageService";
+import { saveMessage } from "@/api/message/saveMessage";
 import { MessagePayload, RoomEvents } from "@shared/socket/roomSocketData";
 
 /**
