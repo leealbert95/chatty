@@ -4,6 +4,25 @@
 
 Chatty is a real-time chat application that allows users to communicate in rooms and direct messages. It supports user authentication, room membership management, and live messaging via WebSockets. The purpose of this app is to practice implementing system design concepts using a real web application.
 
+## Tech stack
+
+### Client
+
+* Typescript
+* React
+* Sass
+* SocketIO (for websocket connections)
+
+### Server
+
+* Nodejs
+* SocketIO (for websocket connections)
+* Prisma (database connection)
+
+### Database
+* MySQL (User and room information)
+* MongoDB (Messages)
+
 ## How to set up
 
 ### Server
@@ -31,7 +50,7 @@ cp .env.example .env
 
 **3. Initialize Prisma**
 
-Initialize prisma. This will create the DATABASE_URL env variable
+Initialize prisma. This will generate the DATABASE_URL variable in the .env file, which you must update with your own database connection credentials:
 
 ```bash
 npx prisma init
