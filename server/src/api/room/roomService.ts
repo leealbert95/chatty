@@ -1,7 +1,10 @@
-import { MemberType as PrismaMemberType, RoomType as PrismaRoomType } from "@prisma/client";
 import { v4 as uuidv4 } from "uuid";
 
 import { prisma } from "@/prisma";
+import {
+  MemberType as PrismaMemberType,
+  RoomType as PrismaRoomType,
+} from "@prisma/client";
 import { MemberDto, MemberType } from "@shared/room/member";
 import { RoomDto, RoomType } from "@shared/room/room";
 
@@ -42,14 +45,19 @@ const addUserToRoom = async (
     prisma.roomMembership.findFirst({ where: { userId, roomId } }),
   ]);
 
-  if (room === null) throw new ResourceNotFoundError(`Room ${roomId} not found`);
+  if (room === null)
+    throw new ResourceNotFoundError(`Room ${roomId} not found`);
   if (existingMembership !== null)
     throw new AlreadyJoinedError(
       `User ${userId} is already a member of room ${roomId}`,
     );
 
   await prisma.roomMembership.create({
-    data: { roomId, userId, membershipType: memberType as unknown as PrismaMemberType },
+    data: {
+      roomId,
+      userId,
+      membershipType: memberType as unknown as PrismaMemberType,
+    },
   });
 
   return {
