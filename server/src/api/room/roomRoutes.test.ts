@@ -3,7 +3,7 @@ import session from "express-session";
 import request from "supertest";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
-vi.mock("./roomService", () => {
+vi.mock("@/service/roomService", () => {
   class ResourceNotFoundError extends Error {
     constructor(message: string) {
       super(message);
@@ -24,7 +24,7 @@ import {
   createRoom,
   listMembersForRoom,
   ResourceNotFoundError,
-} from "./roomService";
+} from "@/service/roomService";
 import { router } from "./roomRoutes";
 
 const mockRoom = {

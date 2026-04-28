@@ -1,7 +1,7 @@
 import bcrypt from "bcrypt";
 import { v4 as uuidv4 } from "uuid";
 
-import { lookUpUserByEmail } from "../userinfo/userInfoService";
+import { lookUpUserByEmail } from "./userInfoService";
 import { prisma } from "@/prisma";
 import { InvalidCredentialsCase } from "@shared/user/login";
 

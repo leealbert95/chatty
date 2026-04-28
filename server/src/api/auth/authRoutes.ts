@@ -7,7 +7,7 @@ import {
   InvalidCredentialsError,
   registerUser,
   UserAlreadyExistsError,
-} from "./authService";
+} from "@/service/authService";
 import { LoginRequest, LoginResponse } from "@shared/user/login";
 import { RegisterRequest, RegisterResponse } from "@shared/user/register";
 

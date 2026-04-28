@@ -1,6 +1,6 @@
 import { Request, Response, Router } from "express";
 
-import { listMessages } from "./messageService";
+import { listMessages } from "@/service/messageService";
 import { requireAuth } from "@/api/auth/requireAuth";
 import { ListMessagesResponse } from "@shared/message/listMessages";
 

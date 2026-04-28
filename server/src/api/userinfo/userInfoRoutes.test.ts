@@ -3,11 +3,11 @@ import session from "express-session";
 import request from "supertest";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
-vi.mock("./userInfoService", () => ({
+vi.mock("@/service/userInfoService", () => ({
   listRoomsForUser: vi.fn(),
 }));
 
-import { listRoomsForUser } from "./userInfoService";
+import { listRoomsForUser } from "@/service/userInfoService";
 import { router } from "./userInfoRoutes";
 
 const mockRoom = {

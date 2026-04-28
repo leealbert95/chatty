@@ -1,6 +1,6 @@
 import { Request, Response, Router } from "express";
 
-import { listRoomsForUser } from "./userInfoService";
+import { listRoomsForUser } from "@/service/userInfoService";
 import { requireAuth } from "@/api/auth/requireAuth";
 
 const router = Router();

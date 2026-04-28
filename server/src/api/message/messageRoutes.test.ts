@@ -2,11 +2,11 @@ import express from "express";
 import request from "supertest";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
-vi.mock("./messageService", () => ({
+vi.mock("@/service/messageService", () => ({
   listMessages: vi.fn(),
 }));
 
-import { listMessages } from "./messageService";
+import { listMessages } from "@/service/messageService";
 import { router } from "./messageRoutes";
 
 const mockMessages = [

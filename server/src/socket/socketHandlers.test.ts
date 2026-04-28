@@ -2,11 +2,11 @@ import { beforeEach, describe, expect, it, vi } from "vitest";
 
 import { RoomEvents } from "@shared/socket/socketData";
 
-vi.mock("@/api/message/messageService", () => ({
+vi.mock("@/service/messageService", () => ({
   saveMessage: vi.fn(),
 }));
 
-import { saveMessage } from "@/api/message/messageService";
+import { saveMessage } from "@/service/messageService";
 import { registerRoomSocketHandlers } from "./socketHandlers";
 
 const createMockSocket = (userId = "u-test-user") => {

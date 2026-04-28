@@ -5,7 +5,7 @@ import { beforeEach, describe, expect, it, vi } from "vitest";
 
 import { InvalidCredentialsCase } from "@shared/user/login";
 
-vi.mock("./authService", () => {
+vi.mock("@/service/authService", () => {
   class UserAlreadyExistsError extends Error {
     constructor(message: string) {
       super(message);
@@ -35,7 +35,7 @@ import {
   InvalidCredentialsError,
   registerUser,
   UserAlreadyExistsError,
-} from "./authService";
+} from "@/service/authService";
 import { router } from "./authRoutes";
 
 const mockUser = {

@@ -5,7 +5,7 @@ import {
   createRoom,
   listMembersForRoom,
   ResourceNotFoundError,
-} from "./roomService";
+} from "@/service/roomService";
 import { requireAuth } from "@/api/auth/requireAuth";
 import { AddMemberRequest } from "@shared/room/addMember";
 import { CreateRoomRequest, CreateRoomResponse } from "@shared/room/createRoom";

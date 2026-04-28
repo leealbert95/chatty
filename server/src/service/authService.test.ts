@@ -14,7 +14,7 @@ vi.mock("@/prisma", () => ({
   },
 }));
 
-vi.mock("../userinfo/userInfoService", () => ({
+vi.mock("./userInfoService", () => ({
   lookUpUserByEmail: vi.fn(),
 }));
 
@@ -31,7 +31,7 @@ vi.mock("uuid", () => ({
 
 import bcrypt from "bcrypt";
 import { prisma } from "@/prisma";
-import { lookUpUserByEmail } from "../userinfo/userInfoService";
+import { lookUpUserByEmail } from "./userInfoService";
 import {
   authenticateUser,
   InvalidCredentialsError,
