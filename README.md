@@ -25,11 +25,17 @@ cp .env.example .env
 
 | Variable | Description |
 |---|---|
-| `DATABASE_URL` | MySQL connection string (e.g. `mysql://user:password@localhost:3306/chatty`) |
+| `DATABASE_URL` | MySQL connection string (e.g. `mysql://user:password@localhost:3306/chatty`). This will be auto-generated when running prisma init. |
 | `SESSION_SECRET` | Secret key used to sign session cookies |
 | `PORT` | Port the server listens on (e.g. `3001`) |
 
 **3. Initialize Prisma**
+
+Initialize prisma. This will create the DATABASE_URL env variable
+
+```bash
+npx prisma init
+```
 
 Run the database migrations to create the schema:
 
