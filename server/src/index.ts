@@ -15,10 +15,16 @@ import { router as userInfoRoutes } from "@/api/userinfo/userInfoRoutes";
 import { prisma } from "@/prisma";
 import { registerRoomSocketHandlers } from "@/socket/roomSocket";
 
+enum NodeEnv {
+  LOCAL = "local",
+  TEST = "test",
+  PROD = "prod",
+}
+
 const PORT = process.env.PORT;
 
 const app = express();
-const FileStore = sessionFileStore(session);
+const FileStore = sessionFileStore(session); // TODO: Use redis for prod
 const httpServer = http.createServer(app);
 const sessionStore = new FileStore({
   path: "./sessions",
@@ -30,7 +36,7 @@ const sessionMiddleware = session({
   resave: false,
   saveUninitialized: false,
   cookie: {
-    secure: false, // TODO: set to true when serving over HTTPS on AWS
+    secure: process.env.NODE_ENV === NodeEnv.PROD,
     maxAge: 24 * 60 * 60 * 1000,
   },
 });
