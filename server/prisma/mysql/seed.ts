@@ -5,23 +5,55 @@ import { createObjectCsvWriter } from "csv-writer";
 import path from "path";
 import { v4 as uuidv4 } from "uuid";
 
-import { prisma } from "../src/prisma";
+import { prisma } from "../../src/prisma";
 
 const SALT_ROUNDS = 12;
 const PLAINTEXT_PASSWORD = "password";
 
 const FIRST_NAMES = [
-  "Alice", "Bob", "Charlie", "Diana", "Eve",
-  "Frank", "Grace", "Henry", "Iris", "Jack",
-  "Karen", "Liam", "Mia", "Noah", "Olivia",
-  "Paul", "Quinn", "Rachel", "Sam", "Tina",
+  "Alice",
+  "Bob",
+  "Charlie",
+  "Diana",
+  "Eve",
+  "Frank",
+  "Grace",
+  "Henry",
+  "Iris",
+  "Jack",
+  "Karen",
+  "Liam",
+  "Mia",
+  "Noah",
+  "Olivia",
+  "Paul",
+  "Quinn",
+  "Rachel",
+  "Sam",
+  "Tina",
 ];
 
 const LAST_NAMES = [
-  "Smith", "Johnson", "Williams", "Jones", "Brown",
-  "Davis", "Miller", "Wilson", "Moore", "Taylor",
-  "Anderson", "Thomas", "Jackson", "White", "Harris",
-  "Martin", "Thompson", "Garcia", "Martinez", "Robinson",
+  "Smith",
+  "Johnson",
+  "Williams",
+  "Jones",
+  "Brown",
+  "Davis",
+  "Miller",
+  "Wilson",
+  "Moore",
+  "Taylor",
+  "Anderson",
+  "Thomas",
+  "Jackson",
+  "White",
+  "Harris",
+  "Martin",
+  "Thompson",
+  "Garcia",
+  "Martinez",
+  "Robinson",
 ];
 
 interface UserRecord {
