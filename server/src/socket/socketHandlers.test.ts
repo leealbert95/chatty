@@ -1,13 +1,13 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
-import { RoomEvents } from "@shared/socket/roomSocketData";
+import { RoomEvents } from "@shared/socket/socketData";
 
 vi.mock("@/api/message/saveMessage", () => ({
   saveMessage: vi.fn(),
 }));
 
 import { saveMessage } from "@/api/message/saveMessage";
-import { registerRoomSocketHandlers } from "./roomSocket";
+import { registerRoomSocketHandlers } from "./socketHandlers";
 
 const createMockSocket = (userId = "u-test-user") => {
   const handlers: Record<string, (...args: any[]) => any> = {};

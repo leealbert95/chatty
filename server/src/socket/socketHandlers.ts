@@ -3,7 +3,7 @@ import "@/session";
 import { Socket } from "socket.io";
 
 import { saveMessage } from "@/api/message/saveMessage";
-import { MessagePayload, RoomEvents } from "@shared/socket/roomSocketData";
+import { MessagePayload, RoomEvents } from "@shared/socket/socketData";
 
 /**
  * Registers all room-related SocketIO event handlers for a connected socket.

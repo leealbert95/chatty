@@ -13,7 +13,7 @@ import { router as messageRoutes } from "@/api/message/messageRoutes";
 import { router as roomRoutes } from "@/api/room/roomRoutes";
 import { router as userInfoRoutes } from "@/api/userinfo/userInfoRoutes";
 import { prisma } from "@/prisma";
-import { registerRoomSocketHandlers } from "@/socket/roomSocket";
+import { registerRoomSocketHandlers } from "@/socket/socketHandlers";
 
 enum NodeEnv {
   LOCAL = "local",

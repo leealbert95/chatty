@@ -1,3 +1,5 @@
+import { MessageDto } from "@/message/message";
+
 /** All possible socket events in a room. Used to listen for socket events */
 enum RoomEvents {
   JOIN = "joinRoom",
