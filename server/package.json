@@ -2,9 +2,6 @@
   "name": "chatty-server",
   "version": "0.0.1",
   "private": true,
-  "prisma": {
-    "seed": "ts-node --require tsconfig-paths/register -r dotenv/config prisma/seed.ts"
-  },
   "scripts": {
     "dev": "lsof -ti:3001 | xargs kill -9 || true && ts-node-dev --require tsconfig-paths/register -r dotenv/config --respawn --transpile-only src/index.ts",
     "dev:debug": "lsof -ti:3001 | xargs kill -9 || true && ts-node-dev --require tsconfig-paths/register -r dotenv/config --respawn --inspect=9229 --transpile-only src/index.ts",

@@ -5,7 +5,7 @@ import "dotenv/config";
 import { defineConfig } from "prisma/config";
 
 export default defineConfig({
-  schema: "schema.prisma",
+  schema: "./schemaMySql.prisma",
   migrations: {
     path: "./migrations",
     seed: "ts-node --require tsconfig-paths/register -r dotenv/config seed.ts",
