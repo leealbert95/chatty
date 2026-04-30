@@ -44,12 +44,15 @@ cp .env.example .env
 
 | Variable | Description |
 |---|---|
-| `DATABASE_URL` | MySQL connection string (e.g. `mysql://user:password@localhost:3306/chatty`) |
-| `DATABASE_URL_MONGODB | MongoDB connection string (e.g. )
+| `NODE_ENV` | The current running environment (`local`, `test`, `prod`) |
+| `DATABASE_URL_MYSQL` | MySQL connection string |
+| `DATABASE_URL_MONGODB` | MongoDB connection string |
 | `SESSION_SECRET` | Secret key used to sign session cookies |
 | `PORT` | Port the server listens on (e.g. `3001`) |
 
 **3. Initialize Prisma**
+
+First, navigate to the database/prisma/mysql directory.
 
 Run the database migrations to create the schema:
 
@@ -63,11 +66,13 @@ Optionally seed the database with sample data:
 npx prisma db seed
 ```
 
-Then run prisma generate to generate the prisma client code. Depending on the prisma version the output may be generated under node_modules or in a /generated folder in the server folder.
+Then run prisma generate to generate the prisma client code. Depending on the prisma version the output may be generated under node_modules or in a /generated folder in the same directory.
 
 ```bash
 npx prisma generate 
 ```
+
+Repeat the above steps (minus prisma migrate) for database/prisma/mongodb as well. Migrate is skipped because it does not apply to mongodb.
 
 **4. Available commands**
 

@@ -14,12 +14,7 @@ import { router as roomRoutes } from "@/api/room/roomRoutes";
 import { router as userInfoRoutes } from "@/api/userinfo/userInfoRoutes";
 import { prisma } from "@/prisma";
 import { registerRoomSocketHandlers } from "@/socket/socketHandlers";
-
-enum NodeEnv {
-  LOCAL = "local",
-  TEST = "test",
-  PROD = "prod",
-}
+import { NodeEnv } from "@shared/environment/env";
 
 const PORT = process.env.PORT;
 
