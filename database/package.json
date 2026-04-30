@@ -1,0 +1,28 @@
+{
+  "name": "chatty-database",
+  "version": "0.0.1",
+  "private": true,
+  "scripts": {
+    "migrate:mysql": "prisma migrate dev --config prisma/mysql/prisma.config.ts",
+    "generate:mysql": "prisma generate --config prisma/mysql/prisma.config.ts",
+    "generate:mongodb": "prisma generate --config prisma/mongodb/prisma.config.ts",
+    "push:mongodb": "prisma db push --config prisma/mongodb/prisma.config.ts",
+    "seed": "ts-node --require tsconfig-paths/register -r dotenv/config prisma/mysql/seed.ts"
+  },
+  "dependencies": {
+    "@prisma/client": "^6.19.3",
+    "prisma": "^6.19.3"
+  },
+  "devDependencies": {
+    "@types/bcrypt": "^5.0.2",
+    "@types/node": "^20.11.20",
+    "@types/uuid": "^9.0.8",
+    "ts-node": "^10.9.2",
+    "tsconfig-paths": "^4.2.0",
+    "typescript": "^5.3.3",
+    "bcrypt": "^5.1.1",
+    "csv-writer": "^1.6.0",
+    "dotenv": "^17.4.2",
+    "uuid": "^14.0.0"
+  }
+}

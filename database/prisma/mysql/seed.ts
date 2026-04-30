@@ -5,7 +5,9 @@ import { createObjectCsvWriter } from "csv-writer";
 import path from "path";
 import { v4 as uuidv4 } from "uuid";
 
-import { prisma } from "../../src/prisma";
+import { PrismaClient } from "@prisma/client";
+
+const prisma = new PrismaClient();
 
 const SALT_ROUNDS = 12;
 const PLAINTEXT_PASSWORD = "password";

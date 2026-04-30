@@ -5,22 +5,19 @@
     "moduleResolution": "node",
     "lib": ["ES2020"],
     "outDir": "dist",
-    "rootDir": "..",
+    "rootDir": ".",
     "strict": true,
     "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,
-    "noUnusedLocals": true,
-    "noFallthroughCasesInSwitch": true,
     "resolveJsonModule": true,
-    "baseUrl": "./", // Base directory for resolution
+    "baseUrl": "./",
     "paths": {
       "@/*": ["src/*"],
-      "@shared/*": ["../shared/*"],
-      "@database/*": ["../database/*"],
+      "@shared/*": ["../shared/*"]
     }
   },
-  "include": ["src", "../shared", "../database"],
+  "include": ["prisma"],
   "exclude": ["node_modules", "dist"]
 }
