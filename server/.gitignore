@@ -1,5 +1,0 @@
-node_modules
-# Keep environment variables out of version control
-.env
-# Omit generated prisma client code
-src/generated/prisma

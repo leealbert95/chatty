@@ -1,0 +1,27 @@
+{
+  "name": "chatty-queue",
+  "version": "0.0.1",
+  "private": "true",
+  "scripts": {
+    "dev": "lsof -ti:3001 | xargs kill -9 || true && ts-node-dev --require tsconfig-paths/register -r dotenv/config --respawn --transpile-only src/index.ts",
+    "dev:debug": "lsof -ti:3001 | xargs kill -9 || true && ts-node-dev --require tsconfig-paths/register -r dotenv/config --respawn --inspect=9229 --transpile-only src/index.ts",
+    "build": "tsc",
+    "start": "node --env-file=.env dist/queue/src/index.js",
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^4.18.3",
+    "uuid": "^14.0.0"
+  },
+  "devDependencies": {
+    "@types/cors": "^2.8.19",
+    "@types/express": "^5.0.6",
+    "@types/node": "^25.6.0",
+    "@types/uuid": "^10.0.0",
+    "ts-node-dev": "^2.0.0",
+    "tsconfig-paths": "^4.2.0",
+    "typescript": "^6.0.3",
+    "vitest": "^4.1.5"
+  }
+}
