@@ -10,8 +10,11 @@
     "test": "vitest run"
   },
   "dependencies": {
+    "bullmq": "^5.76.6",
     "cors": "^2.8.5",
     "express": "^4.18.3",
+    "ioredis": "^5.10.1",
+    "socket.io": "^4.8.3",
     "uuid": "^14.0.0"
   },
   "devDependencies": {

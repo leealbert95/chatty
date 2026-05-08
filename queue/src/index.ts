@@ -1,19 +1,30 @@
 import cors from "cors";
 import express from "express";
 import http from "http";
+import { Server } from "socket.io";
 
-import { router as messageRoutes } from "@/messages/routes";
-import { prisma } from "@/prisma";
+import { registerMessageSocketHandlers } from "./messages/messageSocketHandlers";
+import { prisma } from "./prisma";
 
 const PORT = process.env.PORT;
 
 const app = express();
 const httpServer = http.createServer(app);
 
+const io = new Server(httpServer, {
+  cors: {
+    // TODO: update origin to the main server URL when deploying
+    // origin: "http://localhost:5173",
+    credentials: true,
+  },
+});
+
+io.on("connection", (socket) => {
+  registerMessageSocketHandlers(socket);
+});
+
 app.use(cors({ credentials: true }));
 app.use(express.json());
-
-app.use("/api/message", messageRoutes);
 
 prisma
   .$connect()
